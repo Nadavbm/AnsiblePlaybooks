@@ -1,3 +1,1 @@
-# AnsiblePlaybooks
-
-# These playbooks meant for installation of each role on clean CentOS7
+# AnsiblePlaybooks for CentOS7
