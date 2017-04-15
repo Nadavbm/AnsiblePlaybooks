@@ -1,0 +1,16 @@
+---
+
+- name: Install common yum packages
+  yum: name={{ item }} state=present
+  with_items:
+    - wget
+    - nano
+    - mlocate
+    - ssh
+    - openssh-server
+    - htop
+    - lspci
+    - net-tools
+    - vim
+    - find
+  ignore_errors: yes
