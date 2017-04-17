@@ -26,6 +26,8 @@
   become_user: jenkins
   expect:
    command: cd /home/jenkins/.ssh/; ssh-keygen -t rsa -C "{{ hostname_output }}" -f "{{ hostname_output }}"
+   echo: yes
+   timeout: 5
    responses:
     "passphrase": "" ## Enter passphrase (empty for no passphrase)
 #    'Enter passphrase (empty for no passphrase): ': 'PaSSw0rd'

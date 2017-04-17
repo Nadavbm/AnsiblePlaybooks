@@ -6,7 +6,6 @@
     - wget
     - nano
     - mlocate
-    - ssh
     - openssh-server
     - htop
     - lspci
