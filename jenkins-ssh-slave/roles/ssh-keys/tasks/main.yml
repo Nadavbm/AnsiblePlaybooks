@@ -5,7 +5,7 @@
   become_user: jenkins
   shell: chown -R jenkins /home/jenkins/.ssh
 
- - name: Set the correct permissions to Jenkins user
+- name: Set the correct permissions to Jenkins user
   become: yes
   become_user: jenkins
   shell: chmod 700 /home/jenkins/.ssh
@@ -20,7 +20,7 @@
   become: yes
   become_user: jenkins
   expect:
-   command: cd ~/.ssh/; ssh-keygen -t rsa -C "{{ hostname_output }}" -f "{{ hostname_output }}"
+   command: cd /home/jenkins/.ssh/; ssh-keygen -t rsa -C "{{ hostname_output }}" -f "{{ hostname_output }}"
    responses:
     'Enter passphrase (empty for no passphrase): ': 'PaSSw0rd'
     'Enter same passphrase again: ': 'PaSSw0rd'
@@ -41,5 +41,5 @@
   expect:
    command: scp /home/jenkins/.ssh/apache1 root@192.168.178.12:/root/.ssh/
    responses:
-    'root@192.168.178.12's password: ': 'PaSSw0rd'
+    "root@192.168.178.12's password: ": 'PaSSw0rd'
 # Use password of root user in Jenkins Master to copy the private key to Jenkins
