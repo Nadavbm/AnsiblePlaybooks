@@ -22,8 +22,11 @@
   expect:
    command: cd /home/jenkins/.ssh/; ssh-keygen -t rsa -C "{{ hostname_output }}" -f "{{ hostname_output }}"
    responses:
-    'Enter passphrase (empty for no passphrase): ': 'PaSSw0rd'
-    'Enter same passphrase again: ': 'PaSSw0rd'
+      Question:
+        - 'PaSSw0rd'
+        - 'PaSSw0rd'
+#    'Enter passphrase (empty for no passphrase): ': 'PaSSw0rd'
+#    'Enter same passphrase again: ': 'PaSSw0rd'
 
 - name: Create authorized_keys file in ~/.ssh/authorized_keys
   become: yes
