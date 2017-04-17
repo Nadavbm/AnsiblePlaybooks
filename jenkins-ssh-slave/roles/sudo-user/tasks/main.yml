@@ -1,11 +1,15 @@
 ---
-- name: Add firewall rule for http and https services
-  command: firewall-cmd --add-service=http --permanent
-  ignore_errors: True
+- name: Create a sudo user for Jenkins slave called Jenkins
+  command: useradd -m jenkins
 
-- name: Add firewall rule for http and https services
-  command: firewall-cmd --add-service=https --permanent
-  ignore_errors: True
+- name: Set password for Jenkins user
+  expect:
+    command: passwd jenkins
+    responses:
+      'New password: ': 'PaSSw0rd'
+      'Retype new password: ': 'PaSSw0rd'
 
-- name: Restart firewalld service
-  service: name=firewalld state=restarted  
+- name: Add Jenkins to sudoers
+  command: gpasswd -a jenkins wheel  
+
+
