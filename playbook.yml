@@ -1,0 +1,12 @@
+---
+- name: Cacti installation playbook
+  hosts: cacti
+  become: yes
+  roles:
+   - apache
+   - mysql
+   - php
+   - snmp
+   - cacti
+#  handlers:
+#   - apache

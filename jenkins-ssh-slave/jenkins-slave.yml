@@ -1,0 +1,11 @@
+---
+- name: Jenkins slave installation
+  hosts: jenkins
+  become: yes
+  roles:
+   - common
+   - pexpect
+   - sudo-user
+   - ssh-keys
+
+   Enter file in which to save the key (/home/jenkins/.ssh/id_rsa):

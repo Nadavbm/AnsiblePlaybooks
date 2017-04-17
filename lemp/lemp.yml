@@ -1,0 +1,8 @@
+---
+- name: Lemp installation playbook
+  hosts: lemp
+  become: yes
+  roles:
+   - nginx
+   - mysql
+   - php

@@ -1,0 +1,4 @@
+---
+- name: Install epel-release with yum
+  yum: with { item }
+   - 
