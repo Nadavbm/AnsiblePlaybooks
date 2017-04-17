@@ -10,6 +10,11 @@
   become_user: jenkins
   shell: chmod 700 /home/jenkins/.ssh
 
+- name: Set the correct permissions to Jenkins user
+  become: yes
+  become_user: jenkins
+  shell: chmod 600 /home/jenkins/.ssh/authorized_keys
+
 - name: Register hostname in playbook - Use later for certifactes names
   become: yes
   become_user: jenkins
@@ -22,9 +27,7 @@
   expect:
    command: cd /home/jenkins/.ssh/; ssh-keygen -t rsa -C "{{ hostname_output }}" -f "{{ hostname_output }}"
    responses:
-      Question:
-        - 'PaSSw0rd'
-        - 'PaSSw0rd'
+    "passphrase": "" ## Enter passphrase (empty for no passphrase)
 #    'Enter passphrase (empty for no passphrase): ': 'PaSSw0rd'
 #    'Enter same passphrase again: ': 'PaSSw0rd'
 
