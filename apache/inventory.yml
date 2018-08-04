@@ -1,3 +1,0 @@
-[apache]
-apache1 ansible_host=192.168.178.114
-apache2 ansible_host=192.168.178.116

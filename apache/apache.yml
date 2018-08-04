@@ -1,7 +1,0 @@
----
-- name: Apache installation playbook
-  hosts: apache
-  become: yes
-  roles:
-   - apache
-   - firewall
