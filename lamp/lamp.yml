@@ -1,7 +1,7 @@
 ---
 
-- name: Maria DB server installation (Simple)
-  hosts: mariadb
+- name: Install LAMP stack on CentOS
+  hosts: lemp
   remote_user: root
   become: yes
   vars:
@@ -35,6 +35,7 @@
     ignore_errors: yes
 
   - name: Copy mysql_secure_installation script to the server
+    copy:
       src: files/mysql_secure_installation.sh.j2
       dest: /root/mysql_secure_installation.sh
       owner: root
@@ -70,7 +71,7 @@
       - firewalld
     ignore_errors: yes
 
-  - name: Start firewalld service
+  - name: Stop firewalld service
     service: name={{item}} state=stopped
     with_items:
       - firewalld
@@ -110,6 +111,7 @@
       owner: root
       group: root
       mode: 0755
+    ignore_errors: yes
 
   - name: Search PHP
     shell: yum search php
@@ -138,22 +140,13 @@
       - httpd
     ignore_errors: yes
 
-  - name: Install nginx package
+  - name: Install phpMyAdmin on the server
     yum: name={{ item }} state=latest
     with_items:
       - phpMyAdmin
     ignore_errors: yes
 
-  - name: Add PHP info file to Web service
-    template:
-      src: files/info.php.j2
-      dest: /var/www/html/info.php
-      owner: root
-      group: root
-      mode: 0755
-    ignore_errors: yes
-
-  - name: Add PHP info file to Web service
+  - name: Add phpMyAdmin configuration file
     template:
       src: phpMyAdmin.conf.j2
       dest: /etc/httpd/conf.d/phpMyAdmin.conf
@@ -162,9 +155,9 @@
       mode: 0755
     ignore_errors: yes
 
-  - name: Add PHP info file to Web service
+  - name: Add config inc file to phpMyAdmin
     template:
-      src: config.inc.php.j2
+      src: files/config.inc.php.j2
       dest: /etc/phpMyAdmin/config.inc.php
       owner: root
       group: root
