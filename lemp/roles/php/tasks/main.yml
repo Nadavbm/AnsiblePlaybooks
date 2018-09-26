@@ -45,3 +45,20 @@
     group: root
     mode: 0755
 
+- name: Add info.php page to nginx
+  template:
+    src: info.php.j2
+    dest: /usr/share/nginx/html/info.php
+    owner: root
+    group: root
+    mode: 0755
+
+# Take a look at this link to install different versions of PHP
+# https://www.tecmint.com/install-php-7-in-centos-7/
+#
+# Just change the Config Manager to enable REMI php 7.x as follow:
+## yum-config-manager --enable remi-php70   [Install PHP 7.0]
+## yum-config-manager --enable remi-php71   [Install PHP 7.1]
+## yum-config-manager --enable remi-php72   [Install PHP 7.2]
+#
+
