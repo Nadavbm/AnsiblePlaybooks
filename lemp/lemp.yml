@@ -9,3 +9,6 @@
    - nginx
    - mariadb
    - php
+#   - phpmyadmin
+
+##############################

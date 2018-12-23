@@ -1,0 +1,39 @@
+---
+
+- name: Install docker swarm on CentOS 7
+  hosts: docker
+  remote_user: root
+  become: yes
+  tasks:
+
+  - name: Install common packages
+    yum: name={{ item }} state=latest
+    with_items:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+    ignore_errors: yes
+
+  - name: Install Docker CE
+    shell: yum install docker-ce
+    ignore_errors: yes
+
+  - name: Docker info check
+    shell: docker container --help && docker --version
+    ignore_errors: yes
+
+  - name: Enable Docker service
+    service: name={{item}} enabled=yes
+    with_items:
+      - docker
+    ignore_errors: yes
+
+  - name: Start docker service
+    service: name={{item}} state=started
+    with_items:
+      - docker
+    ignore_errors: yes
+
+  - name: Docker info check
+    shell: docker info
+
