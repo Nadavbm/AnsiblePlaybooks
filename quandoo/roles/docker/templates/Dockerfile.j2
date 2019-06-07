@@ -1,4 +1,4 @@
-OM centos:7
+FROM centos:7
 
 MAINTAINER Nadav Ben Mazia nadavbm@outlook.com
 
@@ -8,6 +8,8 @@ RUN \
     yum install -y epel-release; \
     yum install -y \
     python-pip \
+    openssh \
+    openssh-client \
     openssh-server && \
   easy_install pip; \
   pip install supervisor==${SUPERVISOR_VERSION}
