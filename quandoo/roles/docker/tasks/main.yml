@@ -26,7 +26,7 @@
   shell: docker image ls -a
 
 - name: run the site in a docker container
-  shell: docker run -d quandoo
+  shell: docker run -d -p 2222:22 quandoo
 
 - name: Check if container is running
   shell: docker ps
