@@ -20,7 +20,6 @@
     - yum-utils
     - device-mapper-persistent-data
     - lvm2
-  yum: name=python-pip state=present
   ignore_errors: yes
 
 - name: install the package, force upgrade
