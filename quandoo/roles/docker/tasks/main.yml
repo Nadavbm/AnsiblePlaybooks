@@ -1,0 +1,32 @@
+---
+
+- name: Copy Docker Image to swarm
+  template:
+    src: Dockerfile.j2
+    dest: /storage/docker/images/Dockerfile
+    mode: 644
+    owner: root
+    group: root
+  ignore_errors: yes
+
+- name: Copy Docker Image to swarm
+  template:
+    src: supervisord.conf.j2
+    dest: /storage/docker/images/supervisord.conf
+    mode: 644
+    owner: root
+    group: root
+  ignore_errors: yes
+
+- name: Build docker image from Dockerfile
+  shell: cd /storage/docker/images && docker build -t quandoo .
+  ignore_errors: yes
+
+- name: List images
+  shell: docker image ls -a
+
+- name: run the site in a docker container
+  shell: docker run -d quandoo
+
+- name: Check if container is running
+  shell: docker ps

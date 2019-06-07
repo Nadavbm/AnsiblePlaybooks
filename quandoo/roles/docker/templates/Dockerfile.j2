@@ -1,0 +1,29 @@
+OM centos:7
+
+MAINTAINER Nadav Ben Mazia nadavbm@outlook.com
+
+ENV SUPERVISOR_VERSION=4.0.2
+
+RUN \
+    yum install -y epel-release; \
+    yum install -y \
+    python-pip \
+    openssh-server && \
+  easy_install pip; \
+  pip install supervisor==${SUPERVISOR_VERSION}
+
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+RUN useradd docker_root; usermod -aG wheel docker_root
+
+WORKDIR /home/docker_root/
+RUN mkdir .ssh; chmod -R 700 .ssh/
+
+WORKDIR /home/docker_root/.ssh/
+
+COPY .ssh/ .
+COPY supervisord.conf /etc/
+
+EXPOSE 22
+
+CMD ["/usr/bin/supervisord","--configuration=/etc/supervisord.conf"]
