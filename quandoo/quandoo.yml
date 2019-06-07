@@ -9,4 +9,4 @@
     - swarm
     - ssh
     - docker
-#    - connect
+    - connect

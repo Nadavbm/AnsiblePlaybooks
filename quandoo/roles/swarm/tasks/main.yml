@@ -1,7 +1,7 @@
 ---
 
 - name: Create direcotry for swarm install files and working directory
-  shell: mkdir -p /storage/docker/install && mkdir -p /storage/docker/overlay && mkdir -p /storage/docker/images
+  shell: mkdir -p /storage/docker/install && mkdir -p /storage/docker/overlay && mkdir -p /storage/docker/images/1 && mkdir -p /storage/docker/images/2
   ignore_errors: yes
 
 - name: Add yum config repo

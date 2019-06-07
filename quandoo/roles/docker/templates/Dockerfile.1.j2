@@ -17,7 +17,9 @@ RUN \
 
 RUN echo "docker_root ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/docker_root && \
     chmod 0440 /etc/sudoers.d/docker_root
+
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 RUN useradd docker_root; usermod -aG wheel docker_root
 
@@ -25,9 +27,12 @@ WORKDIR /home/docker_root/
 RUN mkdir .ssh; chmod -R 700 .ssh/
 
 WORKDIR /home/docker_root/.ssh/
+RUN  echo "    IdentityFile id_rsa" >> /etc/ssh/ssh_config
 
 COPY .ssh/ .
 COPY supervisord.conf /etc/
+
+WORKDIR /home/docker_root/
 
 EXPOSE 22
 

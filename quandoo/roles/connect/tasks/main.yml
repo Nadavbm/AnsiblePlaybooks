@@ -1,0 +1,11 @@
+---
+
+- name: Register quando1 container IP
+  shell: export INSTANCE_NAME="quandoo1"
+
+- name: Register quando1 container IP
+  shell: docker inspect --format="{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" $INSTANCE_NAME
+  register: quandoo1
+
+- name: SSH into container 1
+  shell: ssh -i /storage/docker/images/.ssh/id_rsa docker_root@{{ quando1.stdout }} -vvv
