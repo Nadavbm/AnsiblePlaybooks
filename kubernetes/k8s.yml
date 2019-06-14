@@ -1,0 +1,97 @@
+---
+
+- name: Kubernetes isntall on CentOS7
+  hosts: k8s
+  remote_user: root
+  become: yes
+  tasks:
+  - name: Install yum packages
+    yum: name={{ item }} state=present
+    with_items:
+      - wget
+      - vim
+      - htop
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+      - python-pip
+ 
+  - name: Ensure hostname set
+    hostname: name={{ inventory_hostname }}
+    when: not inventory_hostname|match('(\d{1,3}\.){3}\d{1,3}')
+
+  - name: Add IP address of all hosts to all hosts
+    lineinfile:
+      dest: /etc/hosts
+      line: '{{ hostvars[item].ansible_host }} {{ hostvars[item].inventory_hostname }}'
+      state: present
+    with_items: '{{ groups.k8s }}'
+
+  - name: Set host name
+    shell: hostnamectl set-hostname {{ ansible_hostname }}
+
+  - name: bash exec
+    shell: exec bash 
+
+  - name: Set SELINUX
+    selinux:
+      state: disabled
+
+  - name: Swap off
+    shell: swapoff -a && sed -e '/swap/ s/^#*/#/' -i /etc/fstab
+
+  - name: Set net filter
+    shell: modprobe br_netfilter
+
+  - name: Set bridge mode
+    shell: echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+  - name: Add docker repo
+    shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+  - name: Add kubernets repo
+    file:
+      src: files/kubernetes.repo.j2
+      dest: /etc/yum.repos.d/kubernetes.repo
+      mode: 644
+      owner: root
+      group: root
+    ignore_erros: yes
+
+  - name:  Install yum packages
+    yum: name={{ item }} state=present
+    with_items:
+      - docker
+    ignore_erros: yes
+
+  - name: Enable docker service
+    service: name={{item}} enabled=yes
+    with_items:
+      - docker
+    ignore_errors: yes
+
+  - name: Start docker service
+    service: name={{item}} state=started
+    with_items:
+      - docker
+    ignore_errors: yes
+
+  - name: install docker-py package with pip
+    pip: name={{ item }} state=present
+    with_items:
+      - docker
+      - docker-py
+    ignore_errors: yes
+
+  - name:  Install yum packages
+    yum: name={{ item }} state=present
+    with_items:
+      - kubelet
+      - kubeadm
+      - kubectl
+    ignore_erros: yes
+
+#  - name: Set kubeadm driver
+#    shell: sed -i 's/cgroup-driver=systemd/cgroup-driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+#    ignore_errors: yes
+
