@@ -37,14 +37,12 @@
   service: name={{item}} disabled=yes
   with_items:
     - firewalld
-#    - nm
   ignore_errors: yes
 
 - name: Stop Firewalld and Network Manager services
   service: name={{item}} state=stopped
   with_items:
     - firewalld
-#    - nm
   ignore_errors: yes
 
 - name: bash exec

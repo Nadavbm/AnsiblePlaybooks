@@ -43,6 +43,11 @@
   ignore_errors: yes
 
 - name: Initialize Kubeadm on master
+  shell: kubeadm init
+  when: inventory_hostname in groups['master']
+  ignore_errors: yes
+
+- name: Master IP output
   shell: hostname -i
   when: inventory_hostname in groups['master']
   register: master
@@ -99,10 +104,5 @@
 - name: Get nodes list in the cluster
   shell: kubectl get nodes
   when: inventory_hostname in groups['master']
-
-- name: Get nodes list in the cluster
-  shell: kubectl get pods --all-namespace
-  when: inventory_hostname in groups['master']
-
 
 
