@@ -15,30 +15,30 @@
 - name:  Install yum packages
   yum: name={{ item }} state=present
   with_items:
-    - docker
+#    - docker
     - kubelet
     - kubeadm
     - kubectl
   ignore_erros: yes
 
-- name: install docker-py package with pip
-  pip: name={{ item }} state=present
-  with_items:
-    - docker
-    - docker-py
-  ignore_errors: yes
+#- name: install docker-py package with pip
+#  pip: name={{ item }} state=present
+#  with_items:
+#    - docker
+#    - docker-py
+#  ignore_errors: yes
 
 - name: Enable docker service
   service: name={{item}} enabled=yes
   with_items:
-    - docker
+#    - docker
     - kubelet
   ignore_errors: yes
 
 - name: Start docker service
   service: name={{item}} state=started
   with_items:
-    - docker
+#    - docker
     - kubelet
   ignore_errors: yes
 
@@ -105,4 +105,6 @@
   shell: kubectl get nodes
   when: inventory_hostname in groups['master']
 
-
+- name: Get nodes list in the cluster
+  shell: kubectl get pods --all-namespaces
+  when: inventory_hostname in groups['master']

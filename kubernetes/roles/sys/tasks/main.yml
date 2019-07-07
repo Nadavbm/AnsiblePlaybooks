@@ -14,6 +14,7 @@
     - device-mapper-persistent-data
     - lvm2
     - python-pip
+    - rsync
 
 - name: Ensure hostname set
   hostname: name={{ inventory_hostname }}
