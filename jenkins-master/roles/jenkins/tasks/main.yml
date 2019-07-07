@@ -11,6 +11,7 @@
   with_items:
     - jenkins
     - java
+  ignore_errors: yes
 
 - name: Enable Jenkins daemons
   service: name={{item}} enabled=yes
