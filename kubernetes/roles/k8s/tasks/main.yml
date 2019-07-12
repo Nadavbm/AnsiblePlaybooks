@@ -43,7 +43,7 @@
   ignore_errors: yes
 
 - name: Initialize Kubeadm on master
-  shell: kubeadm init
+  shell: kubeadm init --apiserver-advertise-address={{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }} --pod-network-cidr=10.240.0.0/16
   when: inventory_hostname in groups['master']
   ignore_errors: yes
 
@@ -101,6 +101,10 @@
   shell: "mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config && cat ~/.kube/config"
   when: inventory_hostname in groups['master']
 
+- name: Apply kube-flannel pod on master
+  shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+  when: inventory_hostname in groups['master']
+
 - name: Get nodes list in the cluster
   shell: kubectl get nodes
   when: inventory_hostname in groups['master']
@@ -108,3 +112,5 @@
 - name: Get nodes list in the cluster
   shell: kubectl get pods --all-namespaces
   when: inventory_hostname in groups['master']
+
+

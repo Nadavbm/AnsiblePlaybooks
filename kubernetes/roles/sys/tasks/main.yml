@@ -34,8 +34,14 @@
 - name: Set host name
   shell: hostnamectl set-hostname '{{ inventory_hostname }}'
 
+- name: Add nameservers from Google
+  shell: |
+    echo 'nameserver     8.8.8.8
+    nameserver     8.8.8.4' >> /etc/resolve.conf
+  ignore_errors: yes
+
 - name: Disable firewall and Network Manager service
-  service: name={{item}} disabled=yes
+  service: name={{item}} disable=yes
   with_items:
     - firewalld
   ignore_errors: yes
