@@ -8,3 +8,4 @@
     - sys
     - docker
     - k8s
+    - cfg

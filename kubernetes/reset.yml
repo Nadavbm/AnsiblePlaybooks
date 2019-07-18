@@ -53,17 +53,17 @@
     ignore_errors: yes
 ################## Clean nodes configurations #################
   - name: Backup kubelet config
-    shell: mv /etc/kubernetes/kubelet.conf /etc/kubernetes/kubelet.conf.bak
+    shell: yes | mv /etc/kubernetes/kubelet.conf /etc/kubernetes/kubelet.conf.bak
     when: inventory_hostname in groups['nodes']
     ignore_errors: yes
 
   - name: Backup kubelet bootstrap config
-    shell: mv /etc/kubernetes/bootstrap-kubelet.conf /etc/kubernetes/bootstrap-kubelet.conf.bak
+    shell: yes | mv /etc/kubernetes/bootstrap-kubelet.conf /etc/kubernetes/bootstrap-kubelet.conf.bak
     when: inventory_hostname in groups['nodes']
     ignore_errors: yes
 
   - name: Backup ca certificate
-    shell: mv /etc/kubernetes/pki/ca.crt /etc/kubernetes/pki/ca.crt.bak
+    shell: yes | mv /etc/kubernetes/pki/ca.crt /etc/kubernetes/pki/ca.crt.bak
     when: inventory_hostname in groups['nodes']
     ignore_errors: yes
 
