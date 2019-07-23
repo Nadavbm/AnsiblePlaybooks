@@ -4,6 +4,11 @@
   hosts: docker
   remote_user: root
   become: yes
+  vars:
+    URL: https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-18.09.0-3.el7.x86_64.rpm
+#    URL: https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-18.09.0.ce-1.el7.centos.x86_64.rpm
+    DIR: /data/docker/install
+    USER: root
   tasks:
 ########################### Common Packages ################################
 
@@ -17,6 +22,11 @@
     ignore_errors: yes
 
 ############################# Firewall Rules ################################
+  - name: Disable firewalld
+    systemd: 
+      name: firewalld
+      state: stopped
+      enabled: no
 
   - name: Add iptable configuration file
     template:
@@ -43,17 +53,36 @@
     ignore_errors: yes
 
 ############################# Install Docker #################################
+  - name: Remove all docker packages
+    shell: yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-selinux  docker-engine-selinux docker-engine
+    ignore_errors: yes
 
   - name: Get docker repository
     shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
     ignore_errors: yes
 
-  - name: Install Docker CE
-    shell: yum install -y docker-ce
+  - name: Create data dirs
+    shell: mkdir -p /data/docker/{git,registry,install} && mkdir -p /data/docker/registry/{certs,auth,images}
     ignore_errors: yes
 
-  - name: Docker info check
-    shell: docker container --help && docker --version
+  - name: Download docker packages
+    get_url:
+      url: "{{ URL }}"
+      dest: "{{ DIR }}"
+      mode: 0440
+    ignore_errors: yes
+
+  - name: Install docker package
+    shell: yum install {{ DIR }}/docker-ce-18.09.0-3.el7.x86_64.rpm -y
+    ignore_errors: yes
+
+  - name: Yum install docker
+    yum: name={{ item }} state=latest
+    with_items:
+          - docker-ce
+          - docker-ce-cli
+          - container.io
+          - docker-compose
     ignore_errors: yes
 
   - name: Enable Docker service
@@ -71,3 +100,6 @@
   - name: Docker info check
     shell: docker info
 
+  - name: Docker info check
+    shell: docker container --help && docker --version
+    ignore_errors: yes
